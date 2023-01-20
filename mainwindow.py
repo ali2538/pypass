@@ -7,8 +7,9 @@ class MainWindow(tk.Tk):
     def __init__(self, window_title):
         super().__init__()
         self.title(window_title)
-        self.geometry('350x250')
+        self.geometry('450x300')
         self.resizable(True, True)
+        self.styles = ttk.Style(self)
         self.columnconfigure(0, weight=3)
         self.columnconfigure(1, weight=1)
         self.option_selected = tk.IntVar()
@@ -27,10 +28,25 @@ class MainWindow(tk.Tk):
         self.special_chars_checkbox = ttk.Checkbutton(self, text="!@#$%^&*", variable=self.option_deselected)
         self.special_chars_checkbox.grid(column=0, row=3, sticky=tk.W, padx=10)
 
+        # password length options
+        self.columnconfigure(2, weight=4)
+        self.default_password_length = tk.StringVar()
+        self.default_password_length.set("10")
+        self.password_length_label = ttk.Label(self, text="Password Length")
+        self.password_length_label.grid(column=2, row=0, sticky=tk.NW, padx=10, pady=(10, 0))
+        self.password_length_option = ttk.Spinbox(self, from_=8, to=20, textvariable=self.default_password_length,
+                                                  wrap=False)
+        self.password_length_option.grid(column=2, row=1, sticky=tk.N)
 
+        self.btn_generate_password = ttk.Button(self, text="Generate Password", width=15)
+        self.btn_generate_password.grid(column=0, row=5, sticky=tk.W, pady=(10, 0), padx=10)
 
+        self.btn_copy_to_clipboard = ttk.Button(self, text="Copy to Clipboard", width=15)
+        self.btn_copy_to_clipboard.state(["disabled"])
+        self.btn_copy_to_clipboard.grid(column=0, row=6, sticky=tk.W, pady=(10, 0), padx=10)
 
-
-
+        self.styles.configure('TLabel', background="#d4d3d2")
+        self.lbl_generated_password = ttk.Label(self, text="Text", background="white")
+        self.lbl_generated_password.grid(column=1, row=6, sticky=tk.W, pady=(10, 0), padx=10)
 
 

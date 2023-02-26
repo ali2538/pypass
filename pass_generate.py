@@ -2,20 +2,27 @@ import random
 import string
 
 
-def pass_gen(pass_length, spec_chars=False):
+def pass_gen(pass_length, min_digits, min_spec_chars, spec_chars=False):
     special_characters = ['!', '@', '#', '$', '%', '^', '&', '*', '_', '-']
     lowercase_letters = list(string.ascii_lowercase)
     uppercase_letters = list(string.ascii_uppercase)
     digits = list(string.digits)
-    all_chars = digits + lowercase_letters + uppercase_letters
+    all_chars = lowercase_letters + uppercase_letters
+    password_list = []
     password = ""
     if spec_chars:
-        all_chars = all_chars + special_characters
+        for i in range(min_spec_chars):
+            password_list.append(random.choice(special_characters))
 
-    for i in range(0, pass_length):
-        if spec_chars:
-            pass
-        print(random.choice(all_chars))
-        password = password + random.choice(all_chars)
+    for i in range(min_digits):
+        password_list.append(random.choice(digits))
+
+    for i in range(pass_length-(min_digits+min_spec_chars)):
+        password_list.append(random.choice(all_chars))
+
+    random.shuffle(password_list)
+
+    for i in password_list:
+        password = password + str(i)
 
     return password

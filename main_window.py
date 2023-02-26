@@ -74,7 +74,6 @@ class MainWindow(tk.Tk):
         self.lbl_generated_password.grid(column=2, row=6, sticky=tk.W, pady=(10, 0), padx=10)
 
     def special_char_option_changed(self):
-        print(f'before boolval {self.special_chars_option.get()}')
         if self.special_chars_option.get() == 0:
             self.min_special_chars.set(0)
             self.password_min_special_chars.config(state="disabled")
@@ -82,7 +81,9 @@ class MainWindow(tk.Tk):
         else:
             self.min_special_chars.set(1)
             self.password_min_special_chars.config(state="normal")
+
     def generate_password(self):
         pass_length = self.default_password_length.get()
         special_char = self.special_chars_option.get()
-        self.lbl_generated_password.config(text=pass_gen(pass_length=pass_length, spec_chars=special_char))
+        self.lbl_generated_password.config(text=pass_gen(pass_length=pass_length, min_digits=self.min_digits.get(), min_spec_chars=self.min_special_chars.get(), spec_chars=special_char))
+        self.btn_copy_to_clipboard.config(state="normal")

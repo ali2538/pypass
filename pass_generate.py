@@ -13,6 +13,8 @@ def pass_gen(pass_length, spec_chars=False):
         all_chars = all_chars + special_characters
 
     for i in range(0, pass_length):
+        if spec_chars:
+            pass
         print(random.choice(all_chars))
         password = password + random.choice(all_chars)
 

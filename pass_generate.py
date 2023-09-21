@@ -17,7 +17,10 @@ def pass_gen(pass_length, min_digits, min_spec_chars, spec_chars=False):
     for i in range(min_digits):
         password_list.append(random.choice(digits))
 
-    for i in range(pass_length-(min_digits+min_spec_chars)):
+    #making sure at least one lowercase and one upper case letter is included
+    password_list.append(random.choice(lowercase_letters))
+    password_list.append(random.choice(uppercase_letters))
+    for i in range(pass_length-(min_digits+min_spec_chars)-2):
         password_list.append(random.choice(all_chars))
 
     random.shuffle(password_list)

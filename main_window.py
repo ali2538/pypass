@@ -17,13 +17,22 @@ class MainWindow(tk.Tk):
         self.option_selected.set(1)
         self.option_deselected = tk.IntVar()
         self.option_deselected.set(0)
+        self.password_generated = False
+
+        self.uppercase_option = tk.BooleanVar()
+        self.uppercase_option.set(True)
         self.uppercase_checkbox = ttk.Checkbutton(self, text="A-Z", variable=self.option_selected)
         self.uppercase_checkbox.grid(column=0, row=0, sticky=tk.W, padx=10, pady=10)
 
+        self.lowercase_option = tk.BooleanVar()
+        self.lowercase_option.set(True)
         self.lowercase_checkbox = ttk.Checkbutton(self, text="a-z", variable=self.option_selected)
         self.lowercase_checkbox.grid(column=0, row=1, sticky=tk.W, padx=10)
 
-        self.digits_checkbox = ttk.Checkbutton(self, text="0-9", variable=self.option_selected)
+        self.digits_option = tk.BooleanVar()
+        self.digits_option.set(True)
+        self.digits_checkbox = ttk.Checkbutton(self, text="0-9", variable=self.digits_option,
+                                               command=self.digits_options_changed)
         self.digits_checkbox.grid(column=0, row=2, sticky=tk.W, padx=10, pady=10)
 
         self.special_chars_option = tk.BooleanVar()
@@ -38,18 +47,19 @@ class MainWindow(tk.Tk):
         self.default_password_length = tk.IntVar()
         self.default_password_length.set(10)
 
-        self.min_digits = tk.IntVar()
-        self.min_digits.set(1)
-
         self.password_length_label = ttk.Label(self, text="Password Length")
         self.password_length_label.grid(column=2, row=0, sticky=tk.NW, padx=10, pady=(10, 0))
         self.password_length_option = ttk.Spinbox(self, from_=8, to=20, textvariable=self.default_password_length,
-                                                  wrap=False, width=3)
+                                                  wrap=False, width=3,
+                                                  command=self.password_length_changed)
         self.password_length_option.grid(column=2, row=0, sticky=tk.E)
 
+        self.min_digits = tk.IntVar()
+        self.min_digits.set(1)
         self.password_min_digit_label = ttk.Label(self, text="Minimum Digits")
         self.password_min_digit_label.grid(column=2, row=1, sticky=tk.NW, padx=10, pady=(10, 0))
-        self.password_min_digit = ttk.Spinbox(self, from_=0, to=5, textvariable=self.min_digits, width=3, wrap=False)
+        self.password_min_digit = ttk.Spinbox(self, from_=0, to=5, textvariable=self.min_digits, width=3, wrap=False,
+                                              state="normal" if self.min_digits.get() else "disabled")
         self.password_min_digit.grid(column=2, row=1, sticky=tk.E)
 
         self.min_special_chars = tk.IntVar()
@@ -77,13 +87,36 @@ class MainWindow(tk.Tk):
         if self.special_chars_option.get() == 0:
             self.min_special_chars.set(0)
             self.password_min_special_chars.config(state="disabled")
+            if self.password_generated:
+                self.generate_password()
             # self.min_special_chars.
         else:
             self.min_special_chars.set(1)
             self.password_min_special_chars.config(state="normal")
+            if self.password_generated:
+                self.generate_password()
 
     def generate_password(self):
         pass_length = self.default_password_length.get()
         special_char = self.special_chars_option.get()
-        self.lbl_generated_password.config(text=pass_gen(pass_length=pass_length, min_digits=self.min_digits.get(), min_spec_chars=self.min_special_chars.get(), spec_chars=special_char))
+        self.lbl_generated_password.config(text=pass_gen(pass_length=pass_length, min_digits=self.min_digits.get(),
+                                                         min_spec_chars=self.min_special_chars.get(),
+                                                         spec_chars=special_char))
+        self.password_generated = True
         self.btn_copy_to_clipboard.config(state="normal")
+
+    def digits_options_changed(self):
+        if self.digits_option.get() == 0:
+            self.min_digits.set(0)
+            self.password_min_digit.config(state="disabled")
+            if self.password_generated:
+                self.generate_password()
+        else:
+            self.min_digits.set(1)
+            self.password_min_digit.config(state="normal")
+            if self.password_generated:
+                self.generate_password()
+
+    def password_length_changed(self):
+        if self.password_generated:
+            self.generate_password()

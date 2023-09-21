@@ -2,12 +2,16 @@ import random
 import string
 
 
-def pass_gen(pass_length, min_digits, min_spec_chars, spec_chars=False):
+def pass_gen(pass_length,   min_digits, min_spec_chars,uppercase=True, lowercase=True, spec_chars=False):
     special_characters = ['!', '@', '#', '$', '%', '^', '&', '*', '_', '-']
     lowercase_letters = list(string.ascii_lowercase)
     uppercase_letters = list(string.ascii_uppercase)
     digits = list(string.digits)
-    all_chars = lowercase_letters + uppercase_letters
+    all_chars = []
+    if uppercase:
+        all_chars = uppercase_letters
+    if lowercase:
+        all_chars = all_chars + lowercase_letters
     password_list = []
     password = ""
     if spec_chars:
@@ -17,10 +21,16 @@ def pass_gen(pass_length, min_digits, min_spec_chars, spec_chars=False):
     for i in range(min_digits):
         password_list.append(random.choice(digits))
 
-    #making sure at least one lowercase and one upper case letter is included
-    password_list.append(random.choice(lowercase_letters))
-    password_list.append(random.choice(uppercase_letters))
-    for i in range(pass_length-(min_digits+min_spec_chars)-2):
+    # making sure at least one lowercase and one upper case letter is included
+    # if one is only selected, or both, we need to keep the count
+    min_letter = 0
+    if lowercase:
+        password_list.append(random.choice(lowercase_letters))
+        min_letter = min_letter + 1
+    if uppercase:
+        password_list.append(random.choice(uppercase_letters))
+        min_letter = min_letter + 1
+    for i in range(pass_length - (min_digits + min_spec_chars) - min_letter):
         password_list.append(random.choice(all_chars))
 
     random.shuffle(password_list)

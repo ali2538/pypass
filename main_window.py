@@ -21,12 +21,14 @@ class MainWindow(tk.Tk):
 
         self.uppercase_option = tk.BooleanVar()
         self.uppercase_option.set(True)
-        self.uppercase_checkbox = ttk.Checkbutton(self, text="A-Z", variable=self.option_selected)
+        self.uppercase_checkbox = ttk.Checkbutton(self, text="A-Z", variable=self.uppercase_option,
+                                                  command=self.uppercase_option_changed)
         self.uppercase_checkbox.grid(column=0, row=0, sticky=tk.W, padx=10, pady=10)
 
         self.lowercase_option = tk.BooleanVar()
         self.lowercase_option.set(True)
-        self.lowercase_checkbox = ttk.Checkbutton(self, text="a-z", variable=self.option_selected)
+        self.lowercase_checkbox = ttk.Checkbutton(self, text="a-z", variable=self.lowercase_option,
+                                                  command=self.lowercase_option_changed)
         self.lowercase_checkbox.grid(column=0, row=1, sticky=tk.W, padx=10)
 
         self.digits_option = tk.BooleanVar()
@@ -101,6 +103,8 @@ class MainWindow(tk.Tk):
         special_char = self.special_chars_option.get()
         self.lbl_generated_password.config(text=pass_gen(pass_length=pass_length, min_digits=self.min_digits.get(),
                                                          min_spec_chars=self.min_special_chars.get(),
+                                                         lowercase=self.lowercase_option.get(),
+                                                         uppercase=self.uppercase_option.get(),
                                                          spec_chars=special_char))
         self.password_generated = True
         self.btn_copy_to_clipboard.config(state="normal")
@@ -118,5 +122,17 @@ class MainWindow(tk.Tk):
                 self.generate_password()
 
     def password_length_changed(self):
+        if self.password_generated:
+            self.generate_password()
+
+    def lowercase_option_changed(self):
+        if self.uppercase_option.get() == 0:
+            self.uppercase_option.set(True)
+        if self.password_generated:
+            self.generate_password()
+
+    def uppercase_option_changed(self):
+        if self.lowercase_option.get() == 0:
+            self.lowercase_option.set(True)
         if self.password_generated:
             self.generate_password()

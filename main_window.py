@@ -55,7 +55,6 @@ class MainWindow(tk.Tk):
         self.min_letter = 2  # min 1 lowercase and 1 uppercase
         self.remaining_options_range = tk.IntVar()
         self.remaining_options_range.set(self.default_password_length.get() - self.min_letter)
-
         self.password_length_label = ttk.Label(self, text="Password Length")
         self.password_length_label.grid(column=2, row=0, sticky=tk.NW, padx=10, pady=(10, 0))
         self.password_length_option = ttk.Spinbox(self, from_=8, to=30, textvariable=self.default_password_length,
@@ -125,18 +124,17 @@ class MainWindow(tk.Tk):
         self.btn_copy_to_clipboard.config(state="normal")
 
     def update_remaining_char_options(self):
-        print(f'before ----- {self.remaining_options_range.get()}')
         new_limit = self.default_password_length.get() - self.min_letter - self.min_digits.get() - self.min_special_chars.get()
         self.remaining_options_range.set(new_limit)
         self.password_min_special_chars.config(to=self.remaining_options_range.get())
         self.password_min_digit.config(to=self.remaining_options_range.get())
-        print(f'after ----- {self.remaining_options_range.get()}')
         if self.password_generated:
             self.regen_password()
 
     def regen_password(self):
         if self.password_generated:
-            self.generate_password()
+            self.lbl_generated_password.config(text="")
+            self.password_generated = False
 
     def digits_options_changed(self):
         if self.digits_option.get() == 0:
@@ -149,10 +147,6 @@ class MainWindow(tk.Tk):
             self.password_min_digit.config(state="normal")
             if self.password_generated:
                 self.regen_password()
-
-    # def password_length_changed(self):
-    #     if self.password_generated:
-    #         self.generate_password()
 
     def lowercase_option_changed(self):
         if self.uppercase_option.get() == 0:

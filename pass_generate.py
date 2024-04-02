@@ -2,8 +2,15 @@ import random
 import string
 
 
-def pass_gen(pass_length,   min_digits, min_spec_chars,uppercase=True, lowercase=True, spec_chars=False):
-    special_characters = ['!', '@', '#', '$', '%', '^', '&', '*', '_', '-']
+def pass_gen(
+    pass_length,
+    min_digits,
+    min_spec_chars,
+    uppercase=True,
+    lowercase=True,
+    spec_chars=False,
+):
+    special_characters = ["!", "@", "#", "$", "%", "^", "&", "*", "_", "-"]
     lowercase_letters = list(string.ascii_lowercase)
     uppercase_letters = list(string.ascii_uppercase)
     digits = list(string.digits)

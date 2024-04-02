@@ -173,17 +173,16 @@ class MainWindow(tk.Tk):
                 self.regen_password()
 
     def generate_password(self):
-        pass_length = self.password_length.get()
-        special_char = self.special_chars_option.get()
-        temp_pass = pass_gen(
-            pass_length=pass_length,
-            min_digits=self.min_digits.get(),
-            min_spec_chars=self.min_special_chars.get(),
-            lowercase=self.lowercase_option.get(),
-            uppercase=self.uppercase_option.get(),
-            spec_chars=special_char,
+        self.generated_password.set(
+            pass_gen(
+                pass_length=self.password_length.get(),
+                min_digits=self.min_digits.get(),
+                min_spec_chars=self.min_special_chars.get(),
+                lowercase=self.lowercase_option.get(),
+                uppercase=self.uppercase_option.get(),
+                spec_chars=self.special_chars_option.get(),
+            )
         )
-        self.generated_password.set(temp_pass)
 
         # self.lbl_generated_password.config(
         #     text=
@@ -207,7 +206,7 @@ class MainWindow(tk.Tk):
     def regen_password(self):
         self.generated_password.set(
             pass_gen(
-                pass_length=self.password_length,
+                pass_length=self.password_length.get(),
                 min_digits=self.min_digits.get(),
                 min_spec_chars=self.min_special_chars.get(),
                 lowercase=self.lowercase_option.get(),

@@ -7,7 +7,7 @@ class MainWindow(tk.Tk):
     def __init__(self, window_title):
         super().__init__()
         self.title(window_title)
-        self.geometry("850x600")
+        self.geometry("950x600")
         self.resizable(True, True)
         self.styles = ttk.Style(self)
         self.columnconfigure(0, weight=3)
@@ -133,18 +133,26 @@ class MainWindow(tk.Tk):
         self.password_min_special_chars.grid(column=2, row=2, sticky=tk.E)
 
         self.btn_generate_password = ttk.Button(
-            self, text="Generate Password", width=15, command=self.generate_password
+            self, text="Generate Password", width=25, command=self.generate_password
         )
         self.btn_generate_password.grid(
             column=0, row=5, sticky=tk.W, pady=(10, 0), padx=10
         )
 
         self.btn_copy_to_clipboard = ttk.Button(
-            self, text="Copy to Clipboard", width=15, command=self.copy_to_clipboard
+            self, text="Copy to Clipboard", width=25, command=self.copy_to_clipboard
         )
         self.btn_copy_to_clipboard.state(["disabled"])
         self.btn_copy_to_clipboard.grid(
             column=0, row=6, sticky=tk.W, pady=(10, 0), padx=10
+        )
+
+        self.btn_clear_password = ttk.Button(
+            self, text="Clear Password", width=25, command=self.clear_password
+        )
+        self.btn_clear_password.state(["disabled"])
+        self.btn_clear_password.grid(
+            column=0, row=7, sticky=tk.W, pady=(10, 0), padx=10
         )
 
         self.styles.configure("TLabel", background="#d4d3d2")
@@ -165,7 +173,6 @@ class MainWindow(tk.Tk):
             self.password_min_special_chars.config(state="disabled")
             if self.password_generated:
                 self.regen_password()
-            # self.min_special_chars.
         else:
             self.min_special_chars.set(1)
             self.password_min_special_chars.config(state="normal")
@@ -184,11 +191,9 @@ class MainWindow(tk.Tk):
             )
         )
 
-        # self.lbl_generated_password.config(
-        #     text=
-        # )
         self.password_generated = True
         self.btn_copy_to_clipboard.config(state="normal")
+        self.btn_clear_password.config(state="normal")
 
     def update_remaining_char_options(self):
         new_limit = (
@@ -203,6 +208,9 @@ class MainWindow(tk.Tk):
         if self.password_generated:
             self.regen_password()
 
+    def clear_password(self):
+        self.generated_password.set("")
+
     def regen_password(self):
         self.generated_password.set(
             pass_gen(
@@ -214,9 +222,6 @@ class MainWindow(tk.Tk):
                 spec_chars=self.special_chars_option.get(),
             )
         )
-        # if self.password_generated:
-        #     self.lbl_generated_password.config(text="")
-        # self.password_generated = False
 
     def digits_options_changed(self):
         if self.digits_option.get() == 0:

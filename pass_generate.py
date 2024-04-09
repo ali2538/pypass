@@ -9,24 +9,25 @@ def pass_gen(
     uppercase=True,
     lowercase=True,
     spec_chars=False,
+    digits=True,
 ):
     special_characters = ["!", "@", "#", "$", "%", "^", "&", "*", "_", "-"]
     lowercase_letters = list(string.ascii_lowercase)
     uppercase_letters = list(string.ascii_uppercase)
-    digits = list(string.digits)
+    all_digits = list(string.digits)
     all_chars = []
     if uppercase:
-        all_chars = uppercase_letters
+        all_chars.extend(uppercase_letters)
     if lowercase:
-        all_chars = all_chars + lowercase_letters
+        all_chars.extend(lowercase_letters)
     password_list = []
     password = ""
     if spec_chars:
         for i in range(min_spec_chars):
             password_list.append(random.choice(special_characters))
-
-    for i in range(min_digits):
-        password_list.append(random.choice(digits))
+    if digits:
+        for i in range(min_digits):
+            password_list.append(random.choice(all_digits))
 
     # making sure at least one lowercase and one upper case letter is included
     # if one is only selected, or both, we need to keep the count
